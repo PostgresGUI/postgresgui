@@ -476,7 +476,7 @@ class DatabaseService {
             print("❌ [DatabaseService.fetchTableData] Error details: \(String(reflecting: error))")
             throw error
         }
-        
+
         // First, collect column names from the first row
         var columnNames: [String] = []
         var isFirstRow = true
@@ -504,25 +504,31 @@ class DatabaseService {
                 guard index < randomAccess.count else { break }
                 let value: String?
 
-                // Try to decode as Date first (for timestamp columns)
-                if let dateValue = try? randomAccess[index].decode(Date.self) {
+                // Try to decode in order of specificity (most specific types first)
+                // Try Bool first (most specific)
+                if let boolValue = try? randomAccess[index].decode(Bool.self) {
+                    value = String(boolValue)
+                }
+                // Try Int64 (integers)
+                else if let intValue = try? randomAccess[index].decode(Int64.self) {
+                    value = String(intValue)
+                }
+                // Try Double (floating point)
+                else if let doubleValue = try? randomAccess[index].decode(Double.self) {
+                    value = String(doubleValue)
+                }
+                // Try Date (for timestamp columns)
+                else if let dateValue = try? randomAccess[index].decode(Date.self) {
                     let formatter = DateFormatter()
                     formatter.dateStyle = .medium
                     formatter.timeStyle = .medium
                     value = formatter.string(from: dateValue)
                 }
-                // Try to decode as string (PostgresNIO will handle type conversion)
+                // Try String last (most general, catches everything else)
                 else if let stringValue = try? randomAccess[index].decode(String.self) {
                     value = stringValue
                 }
-                // Try other types
-                else if let intValue = try? randomAccess[index].decode(Int64.self) {
-                    value = String(intValue)
-                } else if let doubleValue = try? randomAccess[index].decode(Double.self) {
-                    value = String(doubleValue)
-                } else if let boolValue = try? randomAccess[index].decode(Bool.self) {
-                    value = String(boolValue)
-                } else {
+                else {
                     value = nil // NULL or unsupported type
                 }
 
@@ -531,7 +537,7 @@ class DatabaseService {
 
             tableRows.append(TableRow(values: values))
         }
-        
+
         return tableRows
     }
     
@@ -610,25 +616,31 @@ class DatabaseService {
                 guard index < randomAccess.count else { break }
                 let value: String?
 
-                // Try to decode as Date first (for timestamp columns)
-                if let dateValue = try? randomAccess[index].decode(Date.self) {
+                // Try to decode in order of specificity (most specific types first)
+                // Try Bool first (most specific)
+                if let boolValue = try? randomAccess[index].decode(Bool.self) {
+                    value = String(boolValue)
+                }
+                // Try Int64 (integers)
+                else if let intValue = try? randomAccess[index].decode(Int64.self) {
+                    value = String(intValue)
+                }
+                // Try Double (floating point)
+                else if let doubleValue = try? randomAccess[index].decode(Double.self) {
+                    value = String(doubleValue)
+                }
+                // Try Date (for timestamp columns)
+                else if let dateValue = try? randomAccess[index].decode(Date.self) {
                     let formatter = DateFormatter()
                     formatter.dateStyle = .medium
                     formatter.timeStyle = .medium
                     value = formatter.string(from: dateValue)
                 }
-                // Try to decode as string (PostgresNIO will handle type conversion)
+                // Try String last (most general, catches everything else)
                 else if let stringValue = try? randomAccess[index].decode(String.self) {
                     value = stringValue
                 }
-                // Try other types
-                else if let intValue = try? randomAccess[index].decode(Int64.self) {
-                    value = String(intValue)
-                } else if let doubleValue = try? randomAccess[index].decode(Double.self) {
-                    value = String(doubleValue)
-                } else if let boolValue = try? randomAccess[index].decode(Bool.self) {
-                    value = String(boolValue)
-                } else {
+                else {
                     value = nil // NULL or unsupported type
                 }
 
