@@ -168,6 +168,13 @@ private struct DatabaseRowView: View {
                 }
             }
         }
+        .contextMenu {
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete...", systemImage: "trash")
+            }
+        }
         .onHover { hovering in
             isHovered = hovering
         }

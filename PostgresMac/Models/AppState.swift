@@ -42,4 +42,8 @@ class AppState {
     var queryError: String? = nil
     var showQueryResults: Bool = false
     var queryExecutionTime: TimeInterval? = nil
+    
+    // Schema view state
+    var showTableSchema: Bool = false
+    var schemaTable: TableInfo? = nil
 }

@@ -764,4 +764,32 @@ class DatabaseService {
             throw error
         }
     }
+    
+    /// Delete a table
+    func deleteTable(schema: String, table: String) async throws {
+        print("🗑️  [DatabaseService.deleteTable] START for \(schema).\(table)")
+        
+        guard let connection = connection else {
+            print("❌ [DatabaseService.deleteTable] ERROR: Not connected")
+            throw ConnectionError.notConnected
+        }
+        
+        // Escape schema and table names properly
+        let escapedSchema = schema.replacingOccurrences(of: "\"", with: "\"\"")
+        let escapedTable = table.replacingOccurrences(of: "\"", with: "\"\"")
+        
+        // Execute DROP TABLE
+        let dropQuerySQL = "DROP TABLE \"\(escapedSchema)\".\"\(escapedTable)\";"
+        let dropQuery = PostgresQuery(unsafeSQL: dropQuerySQL)
+        
+        print("📝 [DatabaseService.deleteTable] Executing: \(dropQuerySQL)")
+        
+        do {
+            _ = try await connection.query(dropQuery, logger: logger)
+            print("✅ [DatabaseService.deleteTable] SUCCESS - Table '\(schema).\(table)' deleted")
+        } catch {
+            print("❌ [DatabaseService.deleteTable] ERROR: \(error)")
+            throw error
+        }
+    }
 }

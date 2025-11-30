@@ -74,6 +74,25 @@ struct TablesListView: View {
                 .disabled(appState.isLoadingTables || appState.selectedDatabase == nil)
             }
         }
+        .sheet(isPresented: Binding(
+            get: { appState.showTableSchema },
+            set: { appState.showTableSchema = $0 }
+        )) {
+            if let schemaTable = appState.schemaTable {
+                NavigationStack {
+                    TableSchemaView()
+                        .navigationTitle("\(schemaTable.schema).\(schemaTable.name)")
+                        .toolbar {
+                            ToolbarItem(placement: .automatic) {
+                                Button("Done") {
+                                    appState.showTableSchema = false
+                                    appState.schemaTable = nil
+                                }
+                            }
+                        }
+                }
+            }
+        }
     }
 
     private func generateTableQuery(for table: TableInfo) -> String {
