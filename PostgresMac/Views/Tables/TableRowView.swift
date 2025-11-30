@@ -27,10 +27,10 @@ struct TableRowView: View {
             .padding(.horizontal, 6)
         }
         .contextMenu {
-            Button(role: .destructive) {
-                showDeleteConfirmation = true
+            Button {
+                copyTableName()
             } label: {
-                Label("Delete", systemImage: "trash")
+                Label("Copy Name", systemImage: "doc.on.doc")
             }
             
             Button {
@@ -38,13 +38,13 @@ struct TableRowView: View {
                     await showSchema()
                 }
             } label: {
-                Label("View Schema", systemImage: "info.circle")
+                Label("View Schema...", systemImage: "info.circle")
             }
             
-            Button {
-                copyTableName()
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
             } label: {
-                Label("Copy Name", systemImage: "doc.on.doc")
+                Label("Delete...", systemImage: "trash")
             }
         }
         .confirmationDialog(
