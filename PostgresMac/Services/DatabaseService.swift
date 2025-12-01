@@ -625,6 +625,89 @@ class DatabaseService {
         }
     }
     
+    /// Create a new database
+    func createDatabase(name: String) async throws {
+        print("➕ [DatabaseService.createDatabase] START for database: \(name)")
+        
+        guard connection != nil else {
+            print("❌ [DatabaseService.createDatabase] ERROR: Not connected")
+            throw ConnectionError.notConnected
+        }
+        
+        // We need connection details to reconnect to 'postgres' database
+        guard let host = connectionHost,
+              let port = connectionPort,
+              let username = connectionUsername,
+              let password = connectionPassword else {
+            print("❌ [DatabaseService.createDatabase] ERROR: Connection details not available")
+            throw ConnectionError.notConnected
+        }
+        
+        // Save original database name
+        let originalDatabase = connectionDatabase
+        
+        // Disconnect from current database
+        await disconnect()
+        
+        // Connect to 'postgres' database to create the new database
+        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        self.eventLoopGroup = eventLoopGroup
+        
+        let configuration = PostgresConnection.Configuration(
+            host: host,
+            port: port,
+            username: username,
+            password: password,
+            database: "postgres", // Connect to postgres database
+            tls: .disable
+        )
+        
+        do {
+            let postgresConnection = try await PostgresConnection.connect(
+                on: eventLoopGroup.next(),
+                configuration: configuration,
+                id: 1,
+                logger: logger
+            )
+            
+            self.connection = postgresConnection
+            
+            // Execute CREATE DATABASE
+            // Escape database name properly
+            let escapedName = name.replacingOccurrences(of: "\"", with: "\"\"")
+            let createQuerySQL = "CREATE DATABASE \"\(escapedName)\";"
+            let createQuery = PostgresQuery(unsafeSQL: createQuerySQL)
+            
+            print("📝 [DatabaseService.createDatabase] Executing: \(createQuerySQL)")
+            _ = try await postgresConnection.query(createQuery, logger: logger)
+            
+            print("✅ [DatabaseService.createDatabase] SUCCESS - Database '\(name)' created")
+            
+            // Close connection to postgres
+            try? await postgresConnection.close()
+            self.connection = nil
+            try? await eventLoopGroup.shutdownGracefully()
+            self.eventLoopGroup = nil
+            
+            // Reconnect to original database if it exists
+            if let originalDatabase = originalDatabase {
+                print("🔄 [DatabaseService.createDatabase] Reconnecting to original database: \(originalDatabase)")
+                try await connect(
+                    host: host,
+                    port: port,
+                    username: username,
+                    password: password,
+                    database: originalDatabase
+                )
+            }
+            
+        } catch {
+            print("❌ [DatabaseService.createDatabase] ERROR: \(error)")
+            await disconnect()
+            throw error
+        }
+    }
+    
     /// Delete a table
     func deleteTable(schema: String, table: String) async throws {
         print("🗑️  [DatabaseService.deleteTable] START for \(schema).\(table)")

@@ -15,6 +15,9 @@ struct ConnectionsDatabasesSidebar: View {
     @State private var selectedDatabaseID: DatabaseInfo.ID?
     @State private var connectionError: String?
     @State private var showConnectionError = false
+    @State private var showCreateDatabaseForm = false
+    @State private var newDatabaseName = ""
+    @State private var createDatabaseError: String?
 
     var body: some View {
         List(selection: Binding<DatabaseInfo.ID?>(
@@ -104,6 +107,42 @@ struct ConnectionsDatabasesSidebar: View {
                         DatabaseRowView(database: database)
                     }
                 }
+            }
+        }
+        .safeAreaInset(edge: .bottom) {
+            if appState.isConnected {
+                Button {
+                    showCreateDatabaseForm = true
+                } label: {
+                    Label("Create Database", systemImage: "plus")
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4) // increased y padding
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 100, style: .continuous))
+                .padding()
+            }
+        }
+        .alert("Create Database", isPresented: $showCreateDatabaseForm) {
+            TextField("Database Name", text: $newDatabaseName)
+            Button("Create") {
+                Task {
+                    await createDatabase()
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                newDatabaseName = ""
+            }
+        }
+        .alert("Error Creating Database", isPresented: Binding(
+            get: { createDatabaseError != nil },
+            set: { if !$0 { createDatabaseError = nil } }
+        )) {
+            Button("OK", role: .cancel) {
+                createDatabaseError = nil
+            }
+        } message: {
+            if let error = createDatabaseError {
+                Text(error)
             }
         }
         .onChange(of: appState.isConnected) { oldValue, newValue in
@@ -221,6 +260,23 @@ struct ConnectionsDatabasesSidebar: View {
             print("❌ [loadTables] ERROR: \(error)")
             print("❌ [loadTables] Error details: \(String(describing: error))")
             appState.tables = []
+        }
+    }
+    
+    private func createDatabase() async {
+        guard !newDatabaseName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            createDatabaseError = "Database name cannot be empty"
+            return
+        }
+        
+        let databaseName = newDatabaseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        do {
+            try await appState.databaseService.createDatabase(name: databaseName)
+            newDatabaseName = ""
+            await refreshDatabasesAsync()
+        } catch {
+            createDatabaseError = error.localizedDescription
         }
     }
 }
