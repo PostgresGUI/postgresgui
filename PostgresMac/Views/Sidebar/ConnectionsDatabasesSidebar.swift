@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ConnectionsDatabasesSidebar: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \ConnectionProfile.name) private var connections: [ConnectionProfile]
     @State private var selectedDatabaseID: DatabaseInfo.ID?
+    @State private var connectionError: String?
+    @State private var showConnectionError = false
 
     var body: some View {
         List(selection: Binding<DatabaseInfo.ID?>(
@@ -59,7 +64,34 @@ struct ConnectionsDatabasesSidebar: View {
             }
         )) {
             Section("Connection") {
-                ConnectionPickerView()
+                HStack {
+                    Picker("Connection", selection: Binding(
+                        get: { appState.currentConnection },
+                        set: { newConnection in
+                            if let connection = newConnection {
+                                Task {
+                                    await connect(to: connection)
+                                }
+                            }
+                        }
+                    )) {
+                        if appState.currentConnection == nil {
+                            Text("Select Connection").tag(nil as ConnectionProfile?)
+                        }
+                        ForEach(connections) { connection in
+                            Text(connection.name).tag(connection as ConnectionProfile?)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                                    
+                    Button {
+                        appState.isShowingConnectionsList = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                    .buttonStyle(.plain)
+                }
             }
 
             Section("Databases") {
@@ -74,10 +106,18 @@ struct ConnectionsDatabasesSidebar: View {
                 }
             }
         }
-        .navigationTitle("Databases")
         .onChange(of: appState.isConnected) { oldValue, newValue in
             if newValue {
                 refreshDatabases()
+            }
+        }
+        .alert("Connection Failed", isPresented: $showConnectionError) {
+            Button("OK", role: .cancel) {
+                connectionError = nil
+            }
+        } message: {
+            if let error = connectionError {
+                Text(error)
             }
         }
     }
@@ -93,6 +133,48 @@ struct ConnectionsDatabasesSidebar: View {
             appState.databases = try await appState.databaseService.fetchDatabases()
         } catch {
             print("Failed to refresh databases: \(error)")
+        }
+    }
+    
+    private func connect(to connection: ConnectionProfile) async {
+        do {
+            // Get password from Keychain
+            let password = try KeychainService.getPassword(for: connection.id) ?? ""
+            
+            // Connect
+            try await appState.databaseService.connect(
+                host: connection.host,
+                port: connection.port,
+                username: connection.username,
+                password: password,
+                database: connection.database
+            )
+            
+            try? modelContext.save()
+            
+            // Update app state
+            appState.currentConnection = connection
+            appState.isConnected = true
+            appState.isShowingWelcomeScreen = false
+            
+            // Load databases
+            await loadDatabases()
+            
+        } catch {
+            print("Failed to connect: \(error)")
+            connectionError = error.localizedDescription
+            showConnectionError = true
+            // Reset connection state on error
+            appState.currentConnection = nil
+            appState.isConnected = false
+        }
+    }
+    
+    private func loadDatabases() async {
+        do {
+            appState.databases = try await appState.databaseService.fetchDatabases()
+        } catch {
+            print("Failed to load databases: \(error)")
         }
     }
     

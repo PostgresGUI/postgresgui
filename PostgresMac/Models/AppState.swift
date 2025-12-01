@@ -28,6 +28,8 @@ class AppState {
 
     // UI state
     var isShowingConnectionForm: Bool = false
+    var isShowingConnectionsList: Bool = false
+    var connectionToEdit: ConnectionProfile? = nil
     var isShowingWelcomeScreen: Bool = true
     var currentPage: Int = 0
     var rowsPerPage: Int = Constants.Pagination.defaultRowsPerPage

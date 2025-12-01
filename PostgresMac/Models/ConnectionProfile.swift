@@ -16,7 +16,6 @@ final class ConnectionProfile: Identifiable {
     var port: Int
     var username: String
     var database: String
-    var lastUsed: Date?
     var isFavorite: Bool
     
     init(
@@ -26,7 +25,6 @@ final class ConnectionProfile: Identifiable {
         port: Int = Constants.PostgreSQL.defaultPort,
         username: String,
         database: String = Constants.PostgreSQL.defaultDatabase,
-        lastUsed: Date? = nil,
         isFavorite: Bool = false
     ) {
         self.id = id
@@ -35,7 +33,6 @@ final class ConnectionProfile: Identifiable {
         self.port = port
         self.username = username
         self.database = database
-        self.lastUsed = lastUsed
         self.isFavorite = isFavorite
     }
 }

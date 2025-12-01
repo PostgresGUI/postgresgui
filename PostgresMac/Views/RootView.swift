@@ -22,9 +22,21 @@ struct RootView: View {
         }
         .sheet(isPresented: Binding(
             get: { appState.isShowingConnectionForm },
-            set: { appState.isShowingConnectionForm = $0 }
+            set: { newValue in
+                appState.isShowingConnectionForm = newValue
+                if !newValue {
+                    // Clear edit state when sheet is dismissed
+                    appState.connectionToEdit = nil
+                }
+            }
         )) {
-            ConnectionFormView()
+            ConnectionFormView(connectionToEdit: appState.connectionToEdit)
+        }
+        .sheet(isPresented: Binding(
+            get: { appState.isShowingConnectionsList },
+            set: { appState.isShowingConnectionsList = $0 }
+        )) {
+            ConnectionsListView()
         }
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ConnectionPickerView: View {
-    @Query(sort: \ConnectionProfile.lastUsed, order: .reverse) private var connections: [ConnectionProfile]
+    @Query(sort: \ConnectionProfile.name) private var connections: [ConnectionProfile]
     @Environment(AppState.self) private var appState
     @Environment(\.modelContext) private var modelContext
     
@@ -26,9 +26,9 @@ struct ConnectionPickerView: View {
         .pickerStyle(.menu)
         .labelsHidden()
         .onAppear {
-            // Auto-select the most recently used connection if none is selected
-            if appState.currentConnection == nil, let lastUsed = connections.first {
-                appState.currentConnection = lastUsed
+            // Auto-select the first connection if none is selected
+            if appState.currentConnection == nil, let firstConnection = connections.first {
+                appState.currentConnection = firstConnection
             }
         }
         .onChange(of: appState.currentConnection) { oldValue, newValue in
@@ -54,8 +54,6 @@ struct ConnectionPickerView: View {
                 database: connection.database
             )
             
-            // Update connection timestamp
-            connection.lastUsed = Date()
             try? modelContext.save()
             
             // Update app state

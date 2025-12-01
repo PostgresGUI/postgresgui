@@ -13,6 +13,8 @@ struct ConnectionFormView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) private var appState
     
+    var connectionToEdit: ConnectionProfile?
+    
     @State private var name: String = ""
     @State private var host: String = "localhost"
     @State private var port: String = "5432"
@@ -24,26 +26,41 @@ struct ConnectionFormView: View {
     @State private var testResultColor: Color = .primary
     @State private var isConnecting: Bool = false
     
+    init(connectionToEdit: ConnectionProfile? = nil) {
+        self.connectionToEdit = connectionToEdit
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
-                Section("Connection Details") {
+                Section {
                     TextField("Connection Name", text: $name)
                     TextField("Host", text: $host)
                     TextField("Port", text: $port)
                     TextField("Username", text: $username)
                     SecureField("Password", text: $password)
                     TextField("Database", text: $database)
+                } header: {
+                    Text(connectionToEdit == nil ? "Create New Connection" : "Edit Connection")
                 }
                 
                 if let testResult = testResult {
                     Text(testResult)
                         .foregroundColor(testResultColor)
-                        .font(.caption)
                 }
             }
             .formStyle(.grouped)
-            .navigationTitle("New Connection")
+            .onAppear {
+                if let connection = connectionToEdit {
+                    name = connection.name
+                    host = connection.host
+                    port = String(connection.port)
+                    username = connection.username
+                    database = connection.database
+                    // Don't load password - user needs to re-enter if changing
+                    password = ""
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -60,7 +77,7 @@ struct ConnectionFormView: View {
                         }
                         .disabled(isConnecting)
                         
-                        Button("Connect") {
+                        Button(connectionToEdit == nil ? "Connect" : "Save") {
                             Task {
                                 await connect()
                             }
@@ -84,12 +101,22 @@ struct ConnectionFormView: View {
             return
         }
         
+        // Use password from field, or from Keychain if editing and field is empty
+        let passwordToUse: String
+        if !password.isEmpty {
+            passwordToUse = password
+        } else if let connection = connectionToEdit {
+            passwordToUse = (try? KeychainService.getPassword(for: connection.id)) ?? ""
+        } else {
+            passwordToUse = ""
+        }
+        
         do {
             let success = try await DatabaseService.testConnection(
                 host: host.isEmpty ? "localhost" : host,
                 port: portInt,
                 username: username.isEmpty ? "postgres" : username,
-                password: password,
+                password: passwordToUse,
                 database: database.isEmpty ? "postgres" : database
             )
             
@@ -126,27 +153,58 @@ struct ConnectionFormView: View {
         }
         
         do {
-            // 1. Create ConnectionProfile
-            let profile = ConnectionProfile(
-                name: name,
-                host: host.isEmpty ? "localhost" : host,
-                port: portInt,
-                username: username.isEmpty ? "postgres" : username,
-                database: database.isEmpty ? "postgres" : database,
-                lastUsed: Date()
-            )
+            let profile: ConnectionProfile
             
-            // 2. Save password to Keychain
-            if !password.isEmpty {
-                try KeychainService.savePassword(password, for: profile.id)
+            if let existingConnection = connectionToEdit {
+                // Update existing connection
+                profile = existingConnection
+                profile.name = name
+                profile.host = host.isEmpty ? "localhost" : host
+                profile.port = portInt
+                profile.username = username.isEmpty ? "postgres" : username
+                profile.database = database.isEmpty ? "postgres" : database
+                
+                // Update password in Keychain only if provided
+                if !password.isEmpty {
+                    try KeychainService.savePassword(password, for: profile.id)
+                }
+                
+                // Save changes to SwiftData
+                try modelContext.save()
+                
+                // If this is the current connection, disconnect and reconnect
+                if appState.currentConnection?.id == profile.id {
+                    await appState.databaseService.disconnect()
+                    appState.isConnected = false
+                }
+            } else {
+                // Create new connection
+                profile = ConnectionProfile(
+                    name: name,
+                    host: host.isEmpty ? "localhost" : host,
+                    port: portInt,
+                    username: username.isEmpty ? "postgres" : username,
+                    database: database.isEmpty ? "postgres" : database
+                )
+                
+                // Save password to Keychain
+                if !password.isEmpty {
+                    try KeychainService.savePassword(password, for: profile.id)
+                }
+                
+                // Save profile to SwiftData
+                modelContext.insert(profile)
+                try modelContext.save()
             }
             
-            // 3. Save profile to SwiftData
-            modelContext.insert(profile)
-            try modelContext.save()
-            
-            // 4. Connect to database
-            let passwordToUse = password.isEmpty ? (try? KeychainService.getPassword(for: profile.id)) ?? "" : password
+            // Connect to database (for both new and edited connections)
+            let passwordToUse: String
+            if !password.isEmpty {
+                passwordToUse = password
+            } else {
+                // Try to get password from Keychain
+                passwordToUse = (try? KeychainService.getPassword(for: profile.id)) ?? ""
+            }
             
             try await appState.databaseService.connect(
                 host: profile.host,
@@ -156,15 +214,17 @@ struct ConnectionFormView: View {
                 database: profile.database
             )
             
-            // 5. Update app state
+            try? modelContext.save()
+            
+            // Update app state
             appState.currentConnection = profile
             appState.isConnected = true
             appState.isShowingWelcomeScreen = false
             
-            // 6. Load databases
+            // Load databases
             await loadDatabases()
             
-            // 7. Dismiss and transition to MainSplitView
+            // Dismiss and transition to MainSplitView
             dismiss()
             
         } catch {

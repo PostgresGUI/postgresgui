@@ -57,7 +57,6 @@ struct WelcomeView: View {
             )
             
             // Success - save profile and connect
-            localhostProfile.lastUsed = Date()
             modelContext.insert(localhostProfile)
             try? modelContext.save()
             
