@@ -37,6 +37,16 @@ struct ConnectionsDatabasesSidebar: View {
                 appState.isLoadingTables = true
                 print("🟡 [ConnectionsDatabasesSidebar] Cleared tables, isLoadingTables=true")
 
+                // Clear table selection and all query-related state
+                appState.selectedTable = nil
+                appState.queryText = ""
+                appState.queryResults = []
+                appState.queryColumnNames = nil
+                appState.showQueryResults = false
+                appState.queryError = nil
+                appState.queryExecutionTime = nil
+                print("🧹 [ConnectionsDatabasesSidebar] Cleared table selection and query state")
+
                 if let database = database {
                     print("🟠 [ConnectionsDatabasesSidebar] Starting loadTables for: \(database.name)")
                     Task {

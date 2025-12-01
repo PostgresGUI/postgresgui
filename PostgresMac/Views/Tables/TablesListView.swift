@@ -62,6 +62,12 @@ struct TablesListView: View {
             }
         }
         .navigationTitle("Tables")
+        .onChange(of: appState.selectedTable) { oldValue, newValue in
+            // Clear local selection when selectedTable is cleared (e.g., when database changes)
+            if newValue == nil {
+                selectedTableID = nil
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(action: {
