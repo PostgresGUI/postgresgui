@@ -1,0 +1,649 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EA7C88FE2EDAB28A005BEBE5 /* PostgresNIO in Frameworks */ = {isa = PBXBuildFile; productRef = EA3CC4D52EDA978D00DEE264 /* PostgresNIO */; };
+		EA7C89D42EDB7AE7005BEBE5 /* CodeEditorView in Frameworks */ = {isa = PBXBuildFile; productRef = EA7C89D32EDB7AE7005BEBE5 /* CodeEditorView */; };
+		EA7C89D62EDB7AE7005BEBE5 /* LanguageSupport in Frameworks */ = {isa = PBXBuildFile; productRef = EA7C89D52EDB7AE7005BEBE5 /* LanguageSupport */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EA3CC4B82EDA978D00DEE264 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3CC4A02EDA978C00DEE264 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA3CC4A72EDA978C00DEE264;
+			remoteInfo = PostgresGUI;
+		};
+		EA3CC4C22EDA978D00DEE264 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3CC4A02EDA978C00DEE264 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA3CC4A72EDA978C00DEE264;
+			remoteInfo = PostgresGUI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		EA3CC4A82EDA978C00DEE264 /* PostgresGUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PostgresGUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA3CC4B72EDA978D00DEE264 /* PostgresGUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PostgresGUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA3CC4C12EDA978D00DEE264 /* PostgresGUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PostgresGUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		EA3CC4AA2EDA978C00DEE264 /* PostgresGUI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PostgresGUI;
+			sourceTree = "<group>";
+		};
+		EA3CC4BA2EDA978D00DEE264 /* PostgresGUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PostgresGUITests;
+			sourceTree = "<group>";
+		};
+		EA3CC4C42EDA978D00DEE264 /* PostgresGUIUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PostgresGUIUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EA3CC4A52EDA978C00DEE264 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA7C88FE2EDAB28A005BEBE5 /* PostgresNIO in Frameworks */,
+				EA7C89D62EDB7AE7005BEBE5 /* LanguageSupport in Frameworks */,
+				EA7C89D42EDB7AE7005BEBE5 /* CodeEditorView in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3CC4B42EDA978D00DEE264 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3CC4BE2EDA978D00DEE264 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EA3CC49F2EDA978C00DEE264 = {
+			isa = PBXGroup;
+			children = (
+				EA3CC4AA2EDA978C00DEE264 /* PostgresGUI */,
+				EA3CC4BA2EDA978D00DEE264 /* PostgresGUITests */,
+				EA3CC4C42EDA978D00DEE264 /* PostgresGUIUITests */,
+				EA7C89D22EDB7AE7005BEBE5 /* Frameworks */,
+				EA3CC4A92EDA978C00DEE264 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EA3CC4A92EDA978C00DEE264 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA3CC4A82EDA978C00DEE264 /* PostgresGUI.app */,
+				EA3CC4B72EDA978D00DEE264 /* PostgresGUITests.xctest */,
+				EA3CC4C12EDA978D00DEE264 /* PostgresGUIUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EA7C89D22EDB7AE7005BEBE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EA3CC4A72EDA978C00DEE264 /* PostgresGUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA3CC4CB2EDA978D00DEE264 /* Build configuration list for PBXNativeTarget "PostgresGUI" */;
+			buildPhases = (
+				EA3CC4A42EDA978C00DEE264 /* Sources */,
+				EA3CC4A52EDA978C00DEE264 /* Frameworks */,
+				EA3CC4A62EDA978C00DEE264 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EA3CC4AA2EDA978C00DEE264 /* PostgresGUI */,
+			);
+			name = PostgresGUI;
+			packageProductDependencies = (
+				EA3CC4D52EDA978D00DEE264 /* PostgresNIO */,
+				EA7C89D32EDB7AE7005BEBE5 /* CodeEditorView */,
+				EA7C89D52EDB7AE7005BEBE5 /* LanguageSupport */,
+			);
+			productName = PostgresGUI;
+			productReference = EA3CC4A82EDA978C00DEE264 /* PostgresGUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EA3CC4B62EDA978D00DEE264 /* PostgresGUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA3CC4CE2EDA978D00DEE264 /* Build configuration list for PBXNativeTarget "PostgresGUITests" */;
+			buildPhases = (
+				EA3CC4B32EDA978D00DEE264 /* Sources */,
+				EA3CC4B42EDA978D00DEE264 /* Frameworks */,
+				EA3CC4B52EDA978D00DEE264 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EA3CC4B92EDA978D00DEE264 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EA3CC4BA2EDA978D00DEE264 /* PostgresGUITests */,
+			);
+			name = PostgresGUITests;
+			packageProductDependencies = (
+			);
+			productName = PostgresGUITests;
+			productReference = EA3CC4B72EDA978D00DEE264 /* PostgresGUITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		EA3CC4C02EDA978D00DEE264 /* PostgresGUIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA3CC4D12EDA978D00DEE264 /* Build configuration list for PBXNativeTarget "PostgresGUIUITests" */;
+			buildPhases = (
+				EA3CC4BD2EDA978D00DEE264 /* Sources */,
+				EA3CC4BE2EDA978D00DEE264 /* Frameworks */,
+				EA3CC4BF2EDA978D00DEE264 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EA3CC4C32EDA978D00DEE264 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EA3CC4C42EDA978D00DEE264 /* PostgresGUIUITests */,
+			);
+			name = PostgresGUIUITests;
+			packageProductDependencies = (
+			);
+			productName = PostgresGUIUITests;
+			productReference = EA3CC4C12EDA978D00DEE264 /* PostgresGUIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EA3CC4A02EDA978C00DEE264 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					EA3CC4A72EDA978C00DEE264 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					EA3CC4B62EDA978D00DEE264 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = EA3CC4A72EDA978C00DEE264;
+					};
+					EA3CC4C02EDA978D00DEE264 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = EA3CC4A72EDA978C00DEE264;
+					};
+				};
+			};
+			buildConfigurationList = EA3CC4A32EDA978C00DEE264 /* Build configuration list for PBXProject "PostgresGUI" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EA3CC49F2EDA978C00DEE264;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EA3CC4D42EDA978D00DEE264 /* XCRemoteSwiftPackageReference "postgres-nio" */,
+				EA7C89D12EDB7ACD005BEBE5 /* XCRemoteSwiftPackageReference "CodeEditorView" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EA3CC4A92EDA978C00DEE264 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA3CC4A72EDA978C00DEE264 /* PostgresGUI */,
+				EA3CC4B62EDA978D00DEE264 /* PostgresGUITests */,
+				EA3CC4C02EDA978D00DEE264 /* PostgresGUIUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EA3CC4A62EDA978C00DEE264 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3CC4B52EDA978D00DEE264 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3CC4BF2EDA978D00DEE264 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EA3CC4A42EDA978C00DEE264 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3CC4B32EDA978D00DEE264 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3CC4BD2EDA978D00DEE264 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EA3CC4B92EDA978D00DEE264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA3CC4A72EDA978C00DEE264 /* PostgresGUI */;
+			targetProxy = EA3CC4B82EDA978D00DEE264 /* PBXContainerItemProxy */;
+		};
+		EA3CC4C32EDA978D00DEE264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA3CC4A72EDA978C00DEE264 /* PostgresGUI */;
+			targetProxy = EA3CC4C22EDA978D00DEE264 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		EA3CC4C92EDA978D00DEE264 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		EA3CC4CA2EDA978D00DEE264 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		EA3CC4CC2EDA978D00DEE264 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = PostgresGUI/PostgresGUI.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PostgresGUI;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mghazi.PostgresGUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		EA3CC4CD2EDA978D00DEE264 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = PostgresGUI/PostgresGUI.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = PostgresGUI;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mghazi.PostgresGUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		EA3CC4CF2EDA978D00DEE264 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mghazi.PostgresGUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PostgresGUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PostgresGUI";
+			};
+			name = Debug;
+		};
+		EA3CC4D02EDA978D00DEE264 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mghazi.PostgresGUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PostgresGUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PostgresGUI";
+			};
+			name = Release;
+		};
+		EA3CC4D22EDA978D00DEE264 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mghazi.PostgresGUIUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = PostgresGUI;
+			};
+			name = Debug;
+		};
+		EA3CC4D32EDA978D00DEE264 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75KGPEX6ZF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mghazi.PostgresGUIUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = PostgresGUI;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EA3CC4A32EDA978C00DEE264 /* Build configuration list for PBXProject "PostgresGUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA3CC4C92EDA978D00DEE264 /* Debug */,
+				EA3CC4CA2EDA978D00DEE264 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA3CC4CB2EDA978D00DEE264 /* Build configuration list for PBXNativeTarget "PostgresGUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA3CC4CC2EDA978D00DEE264 /* Debug */,
+				EA3CC4CD2EDA978D00DEE264 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA3CC4CE2EDA978D00DEE264 /* Build configuration list for PBXNativeTarget "PostgresGUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA3CC4CF2EDA978D00DEE264 /* Debug */,
+				EA3CC4D02EDA978D00DEE264 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA3CC4D12EDA978D00DEE264 /* Build configuration list for PBXNativeTarget "PostgresGUIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA3CC4D22EDA978D00DEE264 /* Debug */,
+				EA3CC4D32EDA978D00DEE264 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EA3CC4D42EDA978D00DEE264 /* XCRemoteSwiftPackageReference "postgres-nio" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/postgres-nio.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.21.0;
+			};
+		};
+		EA7C89D12EDB7ACD005BEBE5 /* XCRemoteSwiftPackageReference "CodeEditorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mchakravarty/CodeEditorView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EA3CC4D52EDA978D00DEE264 /* PostgresNIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EA3CC4D42EDA978D00DEE264 /* XCRemoteSwiftPackageReference "postgres-nio" */;
+			productName = PostgresNIO;
+		};
+		EA7C89D32EDB7AE7005BEBE5 /* CodeEditorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EA7C89D12EDB7ACD005BEBE5 /* XCRemoteSwiftPackageReference "CodeEditorView" */;
+			productName = CodeEditorView;
+		};
+		EA7C89D52EDB7AE7005BEBE5 /* LanguageSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EA7C89D12EDB7ACD005BEBE5 /* XCRemoteSwiftPackageReference "CodeEditorView" */;
+			productName = LanguageSupport;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = EA3CC4A02EDA978C00DEE264 /* Project object */;
+}
