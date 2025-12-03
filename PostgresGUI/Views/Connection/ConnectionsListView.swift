@@ -175,6 +175,9 @@ struct ConnectionsListView: View {
             // Check if this is the currently active connection
             let isActiveConnection = appState.currentConnection?.id == connection.id
             
+            // Check if this is the last connection before deletion
+            let wasLastConnection = connections.count == 1
+            
             // Delete password from Keychain
             try KeychainService.deletePassword(for: connection.id)
             
@@ -194,6 +197,11 @@ struct ConnectionsListView: View {
             
             print("✅ [ConnectionsListView] Connection deleted successfully")
             connectionToDelete = nil
+            
+            // If this was the last connection, close modal and show welcome screen
+            if wasLastConnection {
+                appState.isShowingWelcomeScreen = true
+            }
             
         } catch {
             print("❌ [ConnectionsListView] Error deleting connection: \(error)")
