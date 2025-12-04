@@ -8,7 +8,7 @@
 import Foundation
 
 /// SSL mode options for PostgreSQL connections
-enum SSLMode: String {
+enum SSLMode: String, Sendable {
     case disable = "disable"
     case allow = "allow"
     case prefer = "prefer"
@@ -17,7 +17,7 @@ enum SSLMode: String {
     case verifyFull = "verify-full"
 
     /// Default SSL mode when not specified
-    nonisolated(unsafe) static let `default` = SSLMode.prefer
+    nonisolated static let `default` = SSLMode.prefer
 }
 
 /// Represents a parsed PostgreSQL connection string
