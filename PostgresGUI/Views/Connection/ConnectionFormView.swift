@@ -91,7 +91,6 @@ struct ConnectionFormView: View {
 
                         // Test result
                         if let testResult = testResult {
-                            Divider()
                             HStack(spacing: 12) {
                                 Text("")
                                     .frame(width: 120, alignment: .trailing)
@@ -158,35 +157,25 @@ struct ConnectionFormView: View {
                     .textFieldStyle(.roundedBorder)
             }
 
-            Divider()
-
             formRow(label: "Host") {
                 TextField("localhost", text: $host)
                     .textFieldStyle(.roundedBorder)
             }
-
-            Divider()
 
             formRow(label: "Port") {
                 TextField("5432", text: $port)
                     .textFieldStyle(.roundedBorder)
             }
 
-            Divider()
-
             formRow(label: "Username") {
                 TextField("postgres", text: $username)
                     .textFieldStyle(.roundedBorder)
             }
 
-            Divider()
-
             formRow(label: "Password") {
                 SecureField("", text: $password)
                     .textFieldStyle(.roundedBorder)
             }
-
-            Divider()
 
             formRow(label: "Database") {
                 TextField("postgres", text: $database)
@@ -204,9 +193,7 @@ struct ConnectionFormView: View {
                     .textFieldStyle(.roundedBorder)
             }
 
-            Divider()
-
-            formRow(label: "Connection String") {
+            formRow(label: "Connection String", alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     TextEditor(text: $connectionString)
                         .font(.system(.body, design: .monospaced))
@@ -238,9 +225,10 @@ struct ConnectionFormView: View {
 
     private func formRow<Content: View>(
         label: String,
+        alignment: VerticalAlignment = .center,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: alignment, spacing: 12) {
             Text(label)
                 .frame(width: 120, alignment: .trailing)
                 .foregroundColor(.secondary)
