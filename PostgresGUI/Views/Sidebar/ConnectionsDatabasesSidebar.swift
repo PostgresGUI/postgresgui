@@ -18,6 +18,7 @@ struct ConnectionsDatabasesSidebar: View {
     @State private var showCreateDatabaseForm = false
     @State private var newDatabaseName = ""
     @State private var createDatabaseError: String?
+    @State private var hasRestoredConnection = false
 
     var body: some View {
         List(selection: Binding<DatabaseInfo.ID?>(
@@ -150,6 +151,10 @@ struct ConnectionsDatabasesSidebar: View {
                 refreshDatabases()
             }
         }
+        .task {
+            // Restore last connection on app launch
+            await restoreLastConnection()
+        }
         .alert("Connection Failed", isPresented: $showConnectionError) {
             Button("OK", role: .cancel) {
                 connectionError = nil
@@ -159,6 +164,37 @@ struct ConnectionsDatabasesSidebar: View {
                 Text(error)
             }
         }
+    }
+    
+    private func restoreLastConnection() async {
+        // Only restore once and if no connection is currently selected
+        guard !hasRestoredConnection, appState.currentConnection == nil else { return }
+        
+        // Wait a bit for connections to load from SwiftData
+        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        
+        // Check again after waiting
+        guard !connections.isEmpty else { return }
+        
+        hasRestoredConnection = true
+        
+        // Get last connection ID from UserDefaults
+        guard let lastConnectionIdString = UserDefaults.standard.string(forKey: Constants.UserDefaultsKeys.lastConnectionId),
+              let lastConnectionId = UUID(uuidString: lastConnectionIdString) else {
+            return
+        }
+        
+        // Find the connection in the list
+        guard let lastConnection = connections.first(where: { $0.id == lastConnectionId }) else {
+            // Connection not found, clear the stored ID
+            UserDefaults.standard.removeObject(forKey: Constants.UserDefaultsKeys.lastConnectionId)
+            return
+        }
+        
+        // Set the connection and connect
+        // Note: Setting currentConnection programmatically doesn't trigger the picker's setter
+        appState.currentConnection = lastConnection
+        await connect(to: lastConnection)
     }
     
     private func refreshDatabases() {
@@ -195,6 +231,9 @@ struct ConnectionsDatabasesSidebar: View {
             appState.currentConnection = connection
             appState.isConnected = true
             appState.isShowingWelcomeScreen = false
+            
+            // Save last connection ID
+            UserDefaults.standard.set(connection.id.uuidString, forKey: Constants.UserDefaultsKeys.lastConnectionId)
             
             // Load databases
             await loadDatabases()

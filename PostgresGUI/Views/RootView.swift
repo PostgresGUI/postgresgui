@@ -11,6 +11,7 @@ import SwiftData
 struct RootView: View {
     @Environment(AppState.self) private var appState
     @Query private var connections: [ConnectionProfile]
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         Group {

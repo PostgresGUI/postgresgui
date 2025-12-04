@@ -43,4 +43,9 @@ enum Constants {
         static let defaultDatabase: String = "postgres"
         static let defaultUsername: String = "postgres"
     }
+    
+    // UserDefaults keys
+    enum UserDefaultsKeys {
+        static let lastConnectionId = "lastConnectionId"
+    }
 }

@@ -26,9 +26,17 @@ struct ConnectionPickerView: View {
         .pickerStyle(.menu)
         .labelsHidden()
         .onAppear {
-            // Auto-select the first connection if none is selected
-            if appState.currentConnection == nil, let firstConnection = connections.first {
-                appState.currentConnection = firstConnection
+            // If no connection is selected, try to restore last connection or auto-select first
+            if appState.currentConnection == nil {
+                // Try to restore last connection
+                if let lastConnectionIdString = UserDefaults.standard.string(forKey: Constants.UserDefaultsKeys.lastConnectionId),
+                   let lastConnectionId = UUID(uuidString: lastConnectionIdString),
+                   let lastConnection = connections.first(where: { $0.id == lastConnectionId }) {
+                    appState.currentConnection = lastConnection
+                } else if let firstConnection = connections.first {
+                    // Fallback to first connection if no last connection found
+                    appState.currentConnection = firstConnection
+                }
             }
         }
         .onChange(of: appState.currentConnection) { oldValue, newValue in
@@ -58,6 +66,9 @@ struct ConnectionPickerView: View {
             
             // Update app state
             appState.isConnected = true
+            
+            // Save last connection ID
+            UserDefaults.standard.set(connection.id.uuidString, forKey: Constants.UserDefaultsKeys.lastConnectionId)
             
             // Load databases
             await loadDatabases()
