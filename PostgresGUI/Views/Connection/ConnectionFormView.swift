@@ -61,10 +61,13 @@ struct ConnectionFormView: View {
                         inputMode = newMode
                     }) {
                         Image(systemName: "link")
-                            .foregroundColor(isButtonHovered ? .primary : .secondary)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 6)
-                            .background(inputMode == .connectionString ? Color.secondary.opacity(0.2) : Color.clear)
+                            .background(
+                                inputMode == .connectionString 
+                                    ? Color.secondary.opacity(0.2) 
+                                    : (isButtonHovered ? Color.secondary.opacity(0.1) : Color.clear)
+                            )
                             .clipShape(RoundedRectangle(cornerRadius: 100))
                             .contentShape(Rectangle())
                     }
