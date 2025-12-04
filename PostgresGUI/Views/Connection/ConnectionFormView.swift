@@ -33,6 +33,7 @@ struct ConnectionFormView: View {
     @State private var inputMode: ConnectionInputMode = .individual
     @State private var connectionString: String = ""
     @State private var connectionStringWarnings: [String] = []
+    @State private var isButtonHovered = false
 
     enum ConnectionInputMode {
         case individual
@@ -60,11 +61,17 @@ struct ConnectionFormView: View {
                         inputMode = newMode
                     }) {
                         Image(systemName: "link")
-                            .imageScale(.large)
+                            .foregroundColor(isButtonHovered ? .primary : .secondary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 6)
+                            .background(inputMode == .connectionString ? Color.secondary.opacity(0.2) : Color.clear)
+                            .clipShape(RoundedRectangle(cornerRadius: 100))
+                            .contentShape(Rectangle())
                     }
-                    .padding()
-                    .buttonBorderShape(.circle)
-                    .buttonStyle(.glass)
+                    .buttonStyle(.plain)
+                    .onHover { hovering in
+                        isButtonHovered = hovering
+                    }
                 }
                 .padding()
                 .background(Color(nsColor: .controlBackgroundColor))
