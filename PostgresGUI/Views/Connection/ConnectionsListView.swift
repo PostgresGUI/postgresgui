@@ -56,7 +56,7 @@ struct ConnectionsListView: View {
                                 },
                                 onEdit: {
                                     appState.connectionToEdit = connection
-                                    appState.isShowingConnectionForm = true
+                                    appState.showConnectionForm()
                                 },
                                 onDelete: {
                                     connectionToDelete = connection
@@ -80,7 +80,7 @@ struct ConnectionsListView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         appState.connectionToEdit = nil
-                        appState.isShowingConnectionForm = true
+                        appState.showConnectionForm()
                     } label: {
                         Label("New Connection", systemImage: "plus")
                     }

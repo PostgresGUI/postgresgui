@@ -24,6 +24,10 @@ struct RootView: View {
         .sheet(isPresented: Binding(
             get: { appState.isShowingConnectionForm },
             set: { newValue in
+                if newValue {
+                    // Close other sheet before opening this one
+                    appState.isShowingConnectionsList = false
+                }
                 appState.isShowingConnectionForm = newValue
                 if !newValue {
                     // Clear edit state when sheet is dismissed
@@ -35,7 +39,13 @@ struct RootView: View {
         }
         .sheet(isPresented: Binding(
             get: { appState.isShowingConnectionsList },
-            set: { appState.isShowingConnectionsList = $0 }
+            set: { newValue in
+                if newValue {
+                    // Close other sheet before opening this one
+                    appState.isShowingConnectionForm = false
+                }
+                appState.isShowingConnectionsList = newValue
+            }
         )) {
             ConnectionsListView()
         }

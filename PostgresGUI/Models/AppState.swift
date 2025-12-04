@@ -43,4 +43,15 @@ class AppState {
     var queryError: String? = nil
     var showQueryResults: Bool = false
     var queryExecutionTime: TimeInterval? = nil
+    
+    // Sheet management helpers - ensure only one sheet is shown at a time
+    func showConnectionForm() {
+        isShowingConnectionsList = false
+        isShowingConnectionForm = true
+    }
+    
+    func showConnectionsList() {
+        isShowingConnectionForm = false
+        isShowingConnectionsList = true
+    }
 }

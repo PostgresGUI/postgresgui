@@ -88,7 +88,7 @@ struct WelcomeView: View {
         } catch {
             // If passwordless fails, prompt for password
             // For now, show connection form with localhost pre-filled
-            appState.isShowingConnectionForm = true
+            appState.showConnectionForm()
         }
     }
     
@@ -102,6 +102,6 @@ struct WelcomeView: View {
     }
     
     private func showConnectionForm() {
-        appState.isShowingConnectionForm = true
+        appState.showConnectionForm()
     }
 }

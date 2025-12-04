@@ -95,7 +95,7 @@ struct ConnectionsDatabasesSidebar: View {
                     .labelsHidden()
                                     
                     Button {
-                        appState.isShowingConnectionsList = true
+                        appState.showConnectionsList()
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -103,7 +103,7 @@ struct ConnectionsDatabasesSidebar: View {
 
                     Button {
                         appState.connectionToEdit = nil
-                        appState.isShowingConnectionForm = true
+                        appState.showConnectionForm()
                     } label: {
                         Image(systemName: "plus.circle")
                     }
