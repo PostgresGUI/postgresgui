@@ -71,7 +71,8 @@ struct WelcomeView: View {
                 port: localhostProfile.port,
                 username: localhostProfile.username,
                 password: "", // Empty password for trust mode
-                database: localhostProfile.database
+                database: localhostProfile.database,
+                sslMode: localhostProfile.sslModeEnum
             )
             
             // Success - save profile and connect

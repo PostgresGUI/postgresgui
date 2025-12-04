@@ -7,6 +7,19 @@
 
 import Foundation
 
+/// SSL mode options for PostgreSQL connections
+enum SSLMode: String {
+    case disable = "disable"
+    case allow = "allow"
+    case prefer = "prefer"
+    case require = "require"
+    case verifyCA = "verify-ca"
+    case verifyFull = "verify-full"
+
+    /// Default SSL mode when not specified
+    nonisolated(unsafe) static let `default` = SSLMode.prefer
+}
+
 /// Represents a parsed PostgreSQL connection string
 struct PostgresConnectionString {
     let scheme: String
@@ -16,11 +29,12 @@ struct PostgresConnectionString {
     let port: Int
     let database: String?
     let queryParameters: [String: String]
+    let sslMode: SSLMode
 
     /// Returns a list of query parameters that are not currently supported by the application
     var unsupportedParameters: [String] {
         let unsupported = [
-            "sslmode", "connect_timeout", "application_name",
+            "connect_timeout", "application_name",
             "client_encoding", "options", "fallback_application_name",
             "keepalives", "keepalives_idle", "keepalives_interval",
             "keepalives_count", "tcp_user_timeout", "replication",
@@ -148,6 +162,14 @@ enum ConnectionStringParser {
             }
         }
 
+        // Extract SSL mode from query parameters
+        let sslMode: SSLMode
+        if let sslModeString = queryParams["sslmode"] {
+            sslMode = SSLMode(rawValue: sslModeString) ?? .default
+        } else {
+            sslMode = .default
+        }
+
         return PostgresConnectionString(
             scheme: scheme,
             username: username,
@@ -155,7 +177,8 @@ enum ConnectionStringParser {
             host: host,
             port: port,
             database: database,
-            queryParameters: queryParams
+            queryParameters: queryParams,
+            sslMode: sslMode
         )
     }
 
@@ -166,13 +189,15 @@ enum ConnectionStringParser {
     ///   - host: Host address (required)
     ///   - port: Port number (optional, defaults to 5432)
     ///   - database: Database name (optional)
+    ///   - sslMode: SSL mode (optional, defaults to prefer)
     /// - Returns: A PostgreSQL connection string
     static func build(
         username: String?,
         password: String?,
         host: String,
         port: Int,
-        database: String?
+        database: String?,
+        sslMode: SSLMode = .default
     ) -> String {
         var components = URLComponents()
         components.scheme = "postgresql"
@@ -196,6 +221,11 @@ enum ConnectionStringParser {
         // Set database if provided
         if let database = database, !database.isEmpty {
             components.path = "/\(database)"
+        }
+
+        // Add SSL mode as query parameter if not default
+        if sslMode != .default {
+            components.queryItems = [URLQueryItem(name: "sslmode", value: sslMode.rawValue)]
         }
 
         return components.string ?? ""

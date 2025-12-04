@@ -8,6 +8,7 @@
 import Foundation
 import PostgresNIO
 import Logging
+import NIOSSL
 
 @MainActor
 class DatabaseService {
@@ -21,6 +22,7 @@ class DatabaseService {
     private var connectionUsername: String?
     private var connectionPassword: String?
     private var connectionDatabase: String?
+    private var connectionSSLMode: SSLMode?
     
     var isConnected: Bool {
         connection != nil
@@ -40,7 +42,8 @@ class DatabaseService {
         port: Int,
         username: String,
         password: String,
-        database: String
+        database: String,
+        sslMode: SSLMode = .default
     ) async throws {
         print("🔌 [DatabaseService.connect] START - Connecting to \(database) at \(host):\(port) as \(username)")
 
@@ -72,17 +75,32 @@ class DatabaseService {
         self.connectionUsername = username
         self.connectionPassword = password
         self.connectionDatabase = database
-        
-        // Create connection configuration
+        self.connectionSSLMode = sslMode
+
+        // Create connection configuration with appropriate TLS settings
+        let tlsConfiguration: PostgresConnection.Configuration.TLS
+        switch sslMode {
+        case .disable:
+            tlsConfiguration = .disable
+        case .allow, .prefer:
+            // Try TLS, fall back to plain if unavailable
+            let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+            tlsConfiguration = .prefer(sslContext)
+        case .require, .verifyCA, .verifyFull:
+            // Require TLS
+            let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+            tlsConfiguration = .require(sslContext)
+        }
+
         let configuration = PostgresConnection.Configuration(
             host: host,
             port: port,
             username: username,
             password: password,
             database: database,
-            tls: .disable // MVP: TLS disabled as per requirements
+            tls: tlsConfiguration
         )
-        print("⚙️  [DatabaseService.connect] Configuration created for \(database)")
+        print("⚙️  [DatabaseService.connect] Configuration created for \(database) with SSL mode: \(sslMode.rawValue)")
 
         do {
             // Connect to PostgreSQL
@@ -149,6 +167,7 @@ class DatabaseService {
         connectionUsername = nil
         connectionPassword = nil
         connectionDatabase = nil
+        connectionSSLMode = nil
     }
     
     /// Test connection without saving (static method - doesn't require instance)
@@ -157,7 +176,8 @@ class DatabaseService {
         port: Int,
         username: String,
         password: String,
-        database: String
+        database: String,
+        sslMode: SSLMode = .default
     ) async throws -> Bool {
         // Run PostgresNIO operations off the main actor to avoid threading issues
         return try await Task.detached {
@@ -176,13 +196,26 @@ class DatabaseService {
                 try? await eventLoopGroup.shutdownGracefully()
             }
             
+            // Create TLS configuration based on SSL mode
+            let tlsConfiguration: PostgresConnection.Configuration.TLS
+            switch sslMode {
+            case .disable:
+                tlsConfiguration = .disable
+            case .allow, .prefer:
+                let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+                tlsConfiguration = .prefer(sslContext)
+            case .require, .verifyCA, .verifyFull:
+                let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+                tlsConfiguration = .require(sslContext)
+            }
+
             let configuration = PostgresConnection.Configuration(
                 host: host,
                 port: port,
                 username: username,
                 password: password,
                 database: database,
-                tls: .disable
+                tls: tlsConfiguration
             )
             
             do {
@@ -569,14 +602,28 @@ class DatabaseService {
         // Connect to 'postgres' database to drop the target database
         let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         self.eventLoopGroup = eventLoopGroup
-        
+
+        // Use stored SSL mode or default
+        let sslMode = connectionSSLMode ?? .default
+        let tlsConfiguration: PostgresConnection.Configuration.TLS
+        switch sslMode {
+        case .disable:
+            tlsConfiguration = .disable
+        case .allow, .prefer:
+            let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+            tlsConfiguration = .prefer(sslContext)
+        case .require, .verifyCA, .verifyFull:
+            let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+            tlsConfiguration = .require(sslContext)
+        }
+
         let configuration = PostgresConnection.Configuration(
             host: host,
             port: port,
             username: username,
             password: password,
             database: "postgres", // Connect to postgres database
-            tls: .disable
+            tls: tlsConfiguration
         )
         
         do {
@@ -614,7 +661,8 @@ class DatabaseService {
                     port: port,
                     username: username,
                     password: password,
-                    database: originalDatabase
+                    database: originalDatabase,
+                    sslMode: sslMode
                 )
             }
             
@@ -652,14 +700,28 @@ class DatabaseService {
         // Connect to 'postgres' database to create the new database
         let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         self.eventLoopGroup = eventLoopGroup
-        
+
+        // Use stored SSL mode or default
+        let sslMode = connectionSSLMode ?? .default
+        let tlsConfiguration: PostgresConnection.Configuration.TLS
+        switch sslMode {
+        case .disable:
+            tlsConfiguration = .disable
+        case .allow, .prefer:
+            let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+            tlsConfiguration = .prefer(sslContext)
+        case .require, .verifyCA, .verifyFull:
+            let sslContext = try! NIOSSLContext(configuration: .makeClientConfiguration())
+            tlsConfiguration = .require(sslContext)
+        }
+
         let configuration = PostgresConnection.Configuration(
             host: host,
             port: port,
             username: username,
             password: password,
             database: "postgres", // Connect to postgres database
-            tls: .disable
+            tls: tlsConfiguration
         )
         
         do {
@@ -697,7 +759,8 @@ class DatabaseService {
                     port: port,
                     username: username,
                     password: password,
-                    database: originalDatabase
+                    database: originalDatabase,
+                    sslMode: sslMode
                 )
             }
             

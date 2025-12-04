@@ -246,7 +246,8 @@ struct ConnectionsDatabasesSidebar: View {
                 port: connection.port,
                 username: connection.username,
                 password: password,
-                database: connection.database
+                database: connection.database,
+                sslMode: connection.sslModeEnum
             )
             
             try? modelContext.save()
@@ -350,7 +351,8 @@ struct ConnectionsDatabasesSidebar: View {
                 port: connection.port,
                 username: connection.username,
                 password: password,
-                database: database.name
+                database: database.name,
+                sslMode: connection.sslModeEnum
             )
             print("✅ [loadTables] Connected successfully to \(database.name)")
 

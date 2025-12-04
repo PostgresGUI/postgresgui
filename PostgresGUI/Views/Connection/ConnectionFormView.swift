@@ -330,13 +330,23 @@ struct ConnectionFormView: View {
                 )
             }
 
+            // Get SSL mode
+            let sslMode: SSLMode
+            if inputMode == .connectionString {
+                let parsed = try ConnectionStringParser.parse(connectionString)
+                sslMode = parsed.sslMode
+            } else {
+                sslMode = .default
+            }
+
             // Test connection with parsed details
             let success = try await DatabaseService.testConnection(
                 host: connectionDetails.host,
                 port: connectionDetails.port,
                 username: connectionDetails.username,
                 password: connectionDetails.password,
-                database: connectionDetails.database
+                database: connectionDetails.database,
+                sslMode: sslMode
             )
 
             if success {
@@ -366,7 +376,7 @@ struct ConnectionFormView: View {
         }
 
         // Parse connection details based on input mode
-        let connectionDetails: (host: String, port: Int, username: String, password: String, database: String)
+        let connectionDetails: (host: String, port: Int, username: String, password: String, database: String, sslMode: SSLMode)
 
         do {
             if inputMode == .connectionString {
@@ -383,7 +393,8 @@ struct ConnectionFormView: View {
                     port: parsed.port,
                     username: parsed.username ?? Constants.PostgreSQL.defaultUsername,
                     password: parsed.password ?? "",
-                    database: parsed.database ?? Constants.PostgreSQL.defaultDatabase
+                    database: parsed.database ?? Constants.PostgreSQL.defaultDatabase,
+                    sslMode: parsed.sslMode
                 )
             } else {
                 // Individual fields mode (existing logic)
@@ -408,7 +419,8 @@ struct ConnectionFormView: View {
                     port: portInt,
                     username: username.isEmpty ? "postgres" : username,
                     password: passwordToUse,
-                    database: database.isEmpty ? "postgres" : database
+                    database: database.isEmpty ? "postgres" : database,
+                    sslMode: .default
                 )
             }
 
@@ -422,6 +434,7 @@ struct ConnectionFormView: View {
                 profile.port = connectionDetails.port
                 profile.username = connectionDetails.username
                 profile.database = connectionDetails.database
+                profile.sslMode = connectionDetails.sslMode.rawValue
 
                 // Update password in Keychain only if provided
                 if !connectionDetails.password.isEmpty {
@@ -443,7 +456,8 @@ struct ConnectionFormView: View {
                     host: connectionDetails.host,
                     port: connectionDetails.port,
                     username: connectionDetails.username,
-                    database: connectionDetails.database
+                    database: connectionDetails.database,
+                    sslMode: connectionDetails.sslMode
                 )
 
                 // Save password to Keychain
@@ -470,7 +484,8 @@ struct ConnectionFormView: View {
                 port: profile.port,
                 username: profile.username,
                 password: passwordToUse,
-                database: profile.database
+                database: profile.database,
+                sslMode: profile.sslModeEnum
             )
 
             try? modelContext.save()

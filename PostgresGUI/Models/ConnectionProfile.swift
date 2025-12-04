@@ -17,7 +17,8 @@ final class ConnectionProfile: Identifiable {
     var username: String
     var database: String
     var isFavorite: Bool
-    
+    var sslMode: String
+
     init(
         id: UUID = UUID(),
         name: String,
@@ -25,7 +26,8 @@ final class ConnectionProfile: Identifiable {
         port: Int = Constants.PostgreSQL.defaultPort,
         username: String,
         database: String = Constants.PostgreSQL.defaultDatabase,
-        isFavorite: Bool = false
+        isFavorite: Bool = false,
+        sslMode: SSLMode = .default
     ) {
         self.id = id
         self.name = name
@@ -34,6 +36,7 @@ final class ConnectionProfile: Identifiable {
         self.username = username
         self.database = database
         self.isFavorite = isFavorite
+        self.sslMode = sslMode.rawValue
     }
 }
 
@@ -54,13 +57,20 @@ extension ConnectionProfile {
     /// - Returns: A PostgreSQL connection string
     func toConnectionString(includePassword: Bool = false) -> String {
         let password = includePassword ? (try? KeychainService.getPassword(for: id)) : nil
+        let sslModeEnum = SSLMode(rawValue: sslMode) ?? .default
         return ConnectionStringParser.build(
             username: username,
             password: password,
             host: host,
             port: port,
-            database: database
+            database: database,
+            sslMode: sslModeEnum
         )
+    }
+
+    /// Get the SSL mode as an enum
+    var sslModeEnum: SSLMode {
+        SSLMode(rawValue: sslMode) ?? .default
     }
 
     /// Create a ConnectionProfile from a connection string
@@ -83,7 +93,8 @@ extension ConnectionProfile {
             host: parsed.host,
             port: parsed.port,
             username: parsed.username ?? Constants.PostgreSQL.defaultUsername,
-            database: parsed.database ?? Constants.PostgreSQL.defaultDatabase
+            database: parsed.database ?? Constants.PostgreSQL.defaultDatabase,
+            sslMode: parsed.sslMode
         )
 
         return (profile: profile, password: parsed.password)

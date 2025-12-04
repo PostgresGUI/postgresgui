@@ -59,7 +59,8 @@ struct ConnectionPickerView: View {
                 port: connection.port,
                 username: connection.username,
                 password: password,
-                database: connection.database
+                database: connection.database,
+                sslMode: connection.sslModeEnum
             )
             
             try? modelContext.save()
