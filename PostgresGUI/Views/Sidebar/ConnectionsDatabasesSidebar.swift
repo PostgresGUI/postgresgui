@@ -100,6 +100,14 @@ struct ConnectionsDatabasesSidebar: View {
                         Image(systemName: "gearshape")
                     }
                     .buttonStyle(.plain)
+
+                    Button {
+                        appState.connectionToEdit = nil
+                        appState.isShowingConnectionForm = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                    }
+                    .buttonStyle(.plain)
                 }
             }
 
