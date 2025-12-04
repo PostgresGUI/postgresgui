@@ -57,11 +57,16 @@ struct ConnectionsDatabasesSidebar: View {
                 print("🧹 [ConnectionsDatabasesSidebar] Cleared table selection and query state")
 
                 if let database = database {
+                    // Save last selected database name
+                    UserDefaults.standard.set(database.name, forKey: Constants.UserDefaultsKeys.lastDatabaseName)
+                    
                     print("🟠 [ConnectionsDatabasesSidebar] Starting loadTables for: \(database.name)")
                     Task {
                         await loadTables(for: database)
                     }
                 } else {
+                    // Clear saved database when selection is cleared
+                    UserDefaults.standard.removeObject(forKey: Constants.UserDefaultsKeys.lastDatabaseName)
                     print("🔴 [ConnectionsDatabasesSidebar] No database selected, stopping loading")
                     appState.isLoadingTables = false
                 }
@@ -151,6 +156,14 @@ struct ConnectionsDatabasesSidebar: View {
                 refreshDatabases()
             }
         }
+        .onChange(of: appState.currentConnection) { oldValue, newValue in
+            // Clear saved database when connection changes (databases are connection-specific)
+            if oldValue != nil && newValue != oldValue {
+                UserDefaults.standard.removeObject(forKey: Constants.UserDefaultsKeys.lastDatabaseName)
+                selectedDatabaseID = nil
+                appState.selectedDatabase = nil
+            }
+        }
         .task {
             // Restore last connection on app launch
             await restoreLastConnection()
@@ -206,6 +219,9 @@ struct ConnectionsDatabasesSidebar: View {
     private func refreshDatabasesAsync() async {
         do {
             appState.databases = try await appState.databaseService.fetchDatabases()
+            
+            // After refreshing databases, restore last selected database if available
+            await restoreLastDatabase()
         } catch {
             print("Failed to refresh databases: \(error)")
         }
@@ -251,9 +267,51 @@ struct ConnectionsDatabasesSidebar: View {
     private func loadDatabases() async {
         do {
             appState.databases = try await appState.databaseService.fetchDatabases()
+            
+            // After loading databases, restore last selected database if available
+            await restoreLastDatabase()
         } catch {
             print("Failed to load databases: \(error)")
         }
+    }
+    
+    private func restoreLastDatabase() async {
+        // Only restore if no database is currently selected and we have databases
+        guard appState.selectedDatabase == nil, !appState.databases.isEmpty else { return }
+        
+        // Get last database name from UserDefaults
+        guard let lastDatabaseName = UserDefaults.standard.string(forKey: Constants.UserDefaultsKeys.lastDatabaseName),
+              !lastDatabaseName.isEmpty else {
+            return
+        }
+        
+        // Find the database in the list
+        guard let lastDatabase = appState.databases.first(where: { $0.name == lastDatabaseName }) else {
+            // Database not found, clear the stored name
+            UserDefaults.standard.removeObject(forKey: Constants.UserDefaultsKeys.lastDatabaseName)
+            return
+        }
+        
+        // Set the database selection
+        // Note: We set both the local state and appState to ensure consistency
+        selectedDatabaseID = lastDatabase.id
+        appState.selectedDatabase = lastDatabase
+        
+        // Clear tables immediately and show loading state
+        appState.tables = []
+        appState.isLoadingTables = true
+        
+        // Clear table selection and all query-related state
+        appState.selectedTable = nil
+        appState.queryText = ""
+        appState.queryResults = []
+        appState.queryColumnNames = nil
+        appState.showQueryResults = false
+        appState.queryError = nil
+        appState.queryExecutionTime = nil
+        
+        // Load tables for the restored database
+        await loadTables(for: lastDatabase)
     }
     
     private func loadTables(for database: DatabaseInfo) async {

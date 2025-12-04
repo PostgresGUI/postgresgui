@@ -47,5 +47,6 @@ enum Constants {
     // UserDefaults keys
     enum UserDefaultsKeys {
         static let lastConnectionId = "lastConnectionId"
+        static let lastDatabaseName = "lastDatabaseName"
     }
 }
