@@ -60,13 +60,13 @@ struct ConnectionFormView: View {
                         inputMode = newMode
                     }) {
                         Image(systemName: "link")
-                            .font(.system(size: 18))
+                            .imageScale(.large)
                     }
+                    .padding()
+                    .buttonBorderShape(.circle)
                     .buttonStyle(.glass)
-                    .help(inputMode == .connectionString ? "Switch to Individual Fields" : "Switch to Connection String")
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
+                .padding()
                 .background(Color(nsColor: .controlBackgroundColor))
 
                 Divider()
