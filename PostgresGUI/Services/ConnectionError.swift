@@ -16,6 +16,8 @@ enum ConnectionError: LocalizedError {
     case networkUnreachable
     case notConnected
     case unknownError(Error)
+    case invalidConnectionString(ConnectionStringParser.ParseError)
+    case unsupportedParameters([String])
     
     var errorDescription: String? {
         switch self {
@@ -35,6 +37,10 @@ enum ConnectionError: LocalizedError {
             return "Not connected to database."
         case .unknownError(let error):
             return "An error occurred: \(error.localizedDescription)"
+        case .invalidConnectionString(let parseError):
+            return parseError.errorDescription
+        case .unsupportedParameters(let params):
+            return "Connection string contains unsupported parameters: \(params.joined(separator: ", "))"
         }
     }
     
@@ -56,6 +62,10 @@ enum ConnectionError: LocalizedError {
             return "Please connect to a database first."
         case .unknownError:
             return "Please try again or check the server logs for more details."
+        case .invalidConnectionString(let parseError):
+            return parseError.recoverySuggestion
+        case .unsupportedParameters:
+            return "These parameters will be ignored. The connection will proceed with basic settings."
         }
     }
 }
