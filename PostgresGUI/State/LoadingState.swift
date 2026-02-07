@@ -7,13 +7,24 @@
 
 import SwiftUI
 
-enum LoadingPhase: String {
-    case initializingApp = "Initializing..."
-    case restoringTabs = "Restoring tabs..."
-    case connectingToDatabase = "Connecting to database..."
-    case loadingDatabases = "Loading databases..."
-    case loadingTables = "Loading tables..."
-    case ready = ""
+enum LoadingPhase {
+    case initializingApp
+    case restoringTabs
+    case connectingToDatabase
+    case loadingDatabases
+    case loadingTables
+    case ready
+
+    var localizedText: LocalizedStringKey {
+        switch self {
+        case .initializingApp:      "loading.initializing"
+        case .restoringTabs:        "loading.restoring_tabs"
+        case .connectingToDatabase: "loading.connecting"
+        case .loadingDatabases:     "loading.loading_databases"
+        case .loadingTables:        "loading.loading_tables"
+        case .ready:                ""
+        }
+    }
 }
 
 @Observable
@@ -28,8 +39,8 @@ class LoadingState {
         phase != .ready
     }
 
-    var message: String {
-        phase.rawValue
+    var message: LocalizedStringKey {
+        phase.localizedText
     }
 
     func setPhase(_ phase: LoadingPhase) {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// SSL mode options for PostgreSQL connections
 enum SSLMode: String, Sendable, CaseIterable {
@@ -49,21 +50,16 @@ enum SSLMode: String, Sendable, CaseIterable {
             return .verifyFull
         }
     }
-
-    nonisolated var displayName: String {
-        switch self {
-        case .disable:
-            return "Disable"
-        case .allow:
-            return "Allow"
-        case .prefer:
-            return "Prefer"
-        case .require:
-            return "Require"
-        case .verifyCA:
-            return "Verify CA"
-        case .verifyFull:
-            return "Verify Full"
+    
+    nonisolated var localizedKey: LocalizedStringKey {
+            switch self {
+            case .disable:   "ssl_mode.disable"
+            case .allow:     "ssl_mode.allow"
+            case .prefer:    "ssl_mode.prefer"
+            case .require:   "ssl_mode.require"
+            case .verifyCA:  "ssl_mode.verify_ca"
+            case .verifyFull:"ssl_mode.verify_full"
+            }
         }
-    }
+    
 }

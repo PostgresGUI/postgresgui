@@ -149,7 +149,11 @@ struct SavedQueriesSidebarSection: View {
                     viewModel.sortOption = option
                 } label: {
                     HStack {
-                        Label(option.rawValue, systemImage: option.icon)
+                        Label {
+                            Text(option.localizedKey)
+                        } icon: {
+                            Image(systemName: option.icon)
+                        }
                         if viewModel.sortOption == option {
                             Spacer()
                             Image(systemName: "checkmark")

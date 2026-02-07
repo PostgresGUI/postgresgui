@@ -88,11 +88,11 @@ class ConnectionFormViewModel {
         }
     }
 
-    var navigationTitle: String {
+    var navigationTitle: LocalizedStringKey {
         isEditing ? "Edit Connection" : "Create New Connection"
     }
 
-    var toggleLabel: String {
+    var toggleLabel: LocalizedStringKey {
         isEditing ? "View Connection String" : "Use Connection String"
     }
 

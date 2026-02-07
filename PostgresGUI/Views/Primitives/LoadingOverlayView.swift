@@ -20,7 +20,7 @@ struct LoadingOverlayView: View {
                     .scaleEffect(1.5)
                     .tint(.white)
 
-                Text(phase.rawValue)
+                Text(phase.localizedText)
                     .font(.headline)
                     .foregroundStyle(.white)
             }

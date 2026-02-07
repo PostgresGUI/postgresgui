@@ -20,7 +20,7 @@ struct DetailContentToolbar: ToolbarContent {
                 systemName: "square.and.arrow.down",
                 action: { viewModel.openJSONView() },
                 isDisabled: appState.query.selectedRowIDs.isEmpty,
-                helpText: "View selected rows as JSON",
+                helpText: String(localized: "View selected rows as JSON"),
                 useHoverPopover: false
             )
 
@@ -31,7 +31,7 @@ struct DetailContentToolbar: ToolbarContent {
                 isDisabled: appState.query.selectedRowIDs.isEmpty || viewModel.isEditingDisabledDueToContextMismatch,
                 helpText: viewModel.isEditingDisabledDueToContextMismatch
                     ? DetailContentViewModel.contextMismatchHelpText
-                    : "Edit selected row",
+                    : String(localized: "Edit selected row"),
                 useHoverPopover: viewModel.isEditingDisabledDueToContextMismatch
             )
 
@@ -42,7 +42,7 @@ struct DetailContentToolbar: ToolbarContent {
                 isDisabled: appState.query.selectedRowIDs.isEmpty || viewModel.isEditingDisabledDueToContextMismatch,
                 helpText: viewModel.isEditingDisabledDueToContextMismatch
                     ? DetailContentViewModel.contextMismatchHelpText
-                    : "Delete selected rows",
+                    : String(localized: "Delete selected rows"),
                 useHoverPopover: viewModel.isEditingDisabledDueToContextMismatch
             )
         }

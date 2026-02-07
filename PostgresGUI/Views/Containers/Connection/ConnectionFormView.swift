@@ -167,7 +167,7 @@ struct ConnectionFormView: View {
                         set: { viewModel.setSSLModeSelection($0) }
                     )) {
                         ForEach(SSLMode.allCases, id: \.self) { mode in
-                            Text(mode.displayName)
+                            Text(mode.localizedKey)
                                 .tag(mode)
                         }
                     }
@@ -300,7 +300,7 @@ struct ConnectionFormView: View {
 
     private struct HoverTooltipIcon: View {
         let systemName: String
-        let helpText: String
+        let helpText: LocalizedStringKey
 
         @State private var isHovered: Bool = false
 
@@ -322,7 +322,7 @@ struct ConnectionFormView: View {
                     arrowEdge: .bottom
                 ) {
                     Text(helpText)
-                        .lineLimit(2)
+                        .lineLimit(3)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 280, alignment: .center)
                         .fixedSize(horizontal: false, vertical: true)
@@ -373,7 +373,7 @@ struct ConnectionFormView: View {
     }
 
     private func formRow<Content: View>(
-        label: String,
+        label: LocalizedStringKey,
         alignment: VerticalAlignment = .center,
         @ViewBuilder content: () -> Content
     ) -> some View {

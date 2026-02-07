@@ -7,21 +7,33 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 /// Sort options for saved queries
 enum QuerySortOption: String, CaseIterable {
-    case nameAsc = "Name (A-Z)"
-    case nameDesc = "Name (Z-A)"
-    case updatedDesc = "Updated (Newest)"
-    case updatedAsc = "Updated (Oldest)"
-    case createdDesc = "Created (Newest)"
-    case createdAsc = "Created (Oldest)"
+    case nameAsc
+    case nameDesc
+    case updatedDesc
+    case updatedAsc
+    case createdDesc
+    case createdAsc
 
     var icon: String {
         switch self {
         case .nameAsc, .nameDesc: return "textformat"
         case .updatedDesc, .updatedAsc: return "clock"
         case .createdDesc, .createdAsc: return "calendar"
+        }
+    }
+
+    var localizedKey: LocalizedStringKey {
+        switch self {
+        case .nameAsc:      "query_sort.name_asc"
+        case .nameDesc:     "query_sort.name_desc"
+        case .updatedDesc:  "query_sort.updated_desc"
+        case .updatedAsc:   "query_sort.updated_asc"
+        case .createdDesc:  "query_sort.created_desc"
+        case .createdAsc:   "query_sort.created_asc"
         }
     }
 }
