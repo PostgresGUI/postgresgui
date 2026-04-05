@@ -34,7 +34,7 @@ struct QueryEditorComponent: View {
                         Image(systemName: "play.circle.fill")
                     }
                 }
-                .buttonStyle(.glass)
+                .platformGlassProminentButtonStyle()
                 .clipShape(Capsule())
                 .tint(.green)
                 .keyboardShortcut(.return, modifiers: [.command])
@@ -47,8 +47,7 @@ struct QueryEditorComponent: View {
                             .frame(width: 16, height: 16)
                     }
                     .buttonStyle(.bordered)
-                    .glassEffect(.regular.interactive())
-                    .clipShape(Circle())
+                    .platformGlassEffect(Circle())
                     .tint(.red)
                     .keyboardShortcut(.escape, modifiers: [])
                 }

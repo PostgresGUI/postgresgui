@@ -135,8 +135,7 @@ struct SavedQueriesSidebarSection: View {
                 .frame(width: 16, height: 16)
         }
         .buttonStyle(.bordered)
-        .glassEffect(.regular.interactive())
-        .clipShape(Circle())
+        .platformGlassEffect(Circle())
     }
 
     // MARK: - Sort Menu

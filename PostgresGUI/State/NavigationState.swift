@@ -11,22 +11,57 @@ import SwiftUI
 @Observable
 @MainActor
 class NavigationState {
+    enum Sheet: Identifiable {
+        case connectionForm(ConnectionProfile?)
+        case createDatabase
+        case keyboardShortcuts
+        case help
+
+        var id: String {
+            switch self {
+            case let .connectionForm(connection):
+                return "connection-form-\(connection?.id.uuidString ?? "new")"
+            case .createDatabase:
+                return "create-database"
+            case .keyboardShortcuts:
+                return "keyboard-shortcuts"
+            case .help:
+                return "help"
+            }
+        }
+    }
+
     // Navigation
     var navigationPath: NavigationPath = NavigationPath()
 
     // Modal/Sheet state
-    var isShowingConnectionForm: Bool = false
-    var connectionToEdit: ConnectionProfile? = nil
-    var isShowingCreateDatabase: Bool = false
-    var isShowingKeyboardShortcuts: Bool = false
-    var isShowingHelp: Bool = false
+    var activeSheet: Sheet?
+
+    var isShowingConnectionForm: Bool {
+        if case .connectionForm = activeSheet {
+            return true
+        }
+        return false
+    }
 
     // Sheet management helpers
-    func showConnectionForm() {
-        isShowingConnectionForm = true
+    func showConnectionForm(connectionToEdit: ConnectionProfile? = nil) {
+        activeSheet = .connectionForm(connectionToEdit)
     }
 
     func showCreateDatabase() {
-        isShowingCreateDatabase = true
+        activeSheet = .createDatabase
+    }
+
+    func showKeyboardShortcuts() {
+        activeSheet = .keyboardShortcuts
+    }
+
+    func showHelp() {
+        activeSheet = .help
+    }
+
+    func dismissSheet() {
+        activeSheet = nil
     }
 }

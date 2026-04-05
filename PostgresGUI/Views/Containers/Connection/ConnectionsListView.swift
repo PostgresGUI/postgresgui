@@ -64,7 +64,6 @@ struct ConnectionsListView: View {
                     Spacer()
 
                     Button {
-                        appState.navigation.connectionToEdit = nil
                         appState.showConnectionForm()
                     } label: {
                         Label("New Connection", systemImage: "plus")
@@ -96,8 +95,7 @@ struct ConnectionsListView: View {
                                     }
                                 },
                                 onEdit: {
-                                    appState.navigation.connectionToEdit = connection
-                                    appState.showConnectionForm()
+                                    appState.showConnectionForm(connectionToEdit: connection)
                                 },
                                 onDelete: {
                                     vm.connectionToDelete = connection
@@ -213,7 +211,7 @@ private struct ConnectionRowView: View {
                     Label("Connect", systemImage: "powerplug")
                 }
             }
-            .buttonStyle(.glass)
+            .platformGlassProminentButtonStyle()
             .tint(isActive ? .green : nil)
 
             Menu {

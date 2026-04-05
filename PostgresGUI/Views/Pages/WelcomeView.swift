@@ -31,7 +31,7 @@ struct WelcomeView: View {
                 .frame(minWidth: 160, maxWidth: 200)
                 .padding(.vertical, 6)
             }
-            .buttonStyle(.glass)
+            .platformGlassProminentButtonStyle()
             .tint(.primary)
             .controlSize(.large)
             .accessibilityIdentifier("connectToServerButton")

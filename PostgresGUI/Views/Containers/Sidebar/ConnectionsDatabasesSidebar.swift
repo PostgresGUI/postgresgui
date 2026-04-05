@@ -213,8 +213,7 @@ struct ConnectionsDatabasesSidebar: View {
     }
 
     private func handleEditConnection(_ connection: ConnectionProfile) {
-        appState.navigation.connectionToEdit = connection
-        appState.showConnectionForm()
+        appState.showConnectionForm(connectionToEdit: connection)
     }
 
     private func handleDeleteConnection(_ connection: ConnectionProfile) {
@@ -222,7 +221,6 @@ struct ConnectionsDatabasesSidebar: View {
     }
 
     private func handleCreateConnection() {
-        appState.navigation.connectionToEdit = nil
         appState.showConnectionForm()
     }
 
@@ -235,7 +233,7 @@ struct ConnectionsDatabasesSidebar: View {
     }
 
     private func handleCreateDatabase() {
-        appState.navigation.showCreateDatabase()
+        appState.showCreateDatabase()
     }
 
     @MainActor

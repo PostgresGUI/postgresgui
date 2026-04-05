@@ -40,30 +40,32 @@ struct RootView: View {
         }
         .environment(tabManager)
         .environment(loadingState)
-        .sheet(isPresented: Binding(
-            get: { appState.navigation.isShowingConnectionForm },
-            set: { newValue in
-                appState.navigation.isShowingConnectionForm = newValue
-                if !newValue {
-                    appState.navigation.connectionToEdit = nil
+        .sheet(
+            item: Binding(
+                get: { appState.navigation.activeSheet },
+                set: { appState.navigation.activeSheet = $0 }
+            )
+        ) { sheet in
+            switch sheet {
+            case let .connectionForm(connectionToEdit):
+                ConnectionFormView(connectionToEdit: connectionToEdit)
+                    .environment(appState)
+            case .createDatabase:
+                CreateDatabaseView { database in
+                    Task {
+                        await viewModel?.selectDatabase(database)
+                    }
                 }
-            }
-        )) {
-            ConnectionFormView(connectionToEdit: appState.navigation.connectionToEdit)
                 .environment(appState)
-        }
-        .sheet(isPresented: Binding(
-            get: { appState.navigation.isShowingCreateDatabase },
-            set: { appState.navigation.isShowingCreateDatabase = $0 }
-        )) {
-            CreateDatabaseView { database in
-                Task {
-                    await viewModel?.selectDatabase(database)
-                }
+            case .keyboardShortcuts:
+                KeyboardShortcutsView()
+            case .help:
+                HelpView()
             }
-            .environment(appState)
         }
         .task {
+            guard viewModel == nil else { return }
+
             // Wire up tabManager to appState for result caching
             appState.tabManager = tabManager
 
@@ -108,22 +110,10 @@ struct RootView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .showKeyboardShortcuts)) { _ in
-            appState.navigation.isShowingKeyboardShortcuts = true
-        }
-        .sheet(isPresented: Binding(
-            get: { appState.navigation.isShowingKeyboardShortcuts },
-            set: { appState.navigation.isShowingKeyboardShortcuts = $0 }
-        )) {
-            KeyboardShortcutsView()
+            appState.showKeyboardShortcuts()
         }
         .onReceive(NotificationCenter.default.publisher(for: .showHelp)) { _ in
-            appState.navigation.isShowingHelp = true
-        }
-        .sheet(isPresented: Binding(
-            get: { appState.navigation.isShowingHelp },
-            set: { appState.navigation.isShowingHelp = $0 }
-        )) {
-            HelpView()
+            appState.showHelp()
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {

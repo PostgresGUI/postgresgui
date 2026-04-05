@@ -52,6 +52,22 @@ class AppState {
         navigation.showConnectionForm()
     }
 
+    func showConnectionForm(connectionToEdit: ConnectionProfile?) {
+        navigation.showConnectionForm(connectionToEdit: connectionToEdit)
+    }
+
+    func showCreateDatabase() {
+        navigation.showCreateDatabase()
+    }
+
+    func showKeyboardShortcuts() {
+        navigation.showKeyboardShortcuts()
+    }
+
+    func showHelp() {
+        navigation.showHelp()
+    }
+
     // MARK: - Query Execution
 
     /// Request a table query and cancel any in-flight table query task.
