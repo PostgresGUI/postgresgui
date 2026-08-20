@@ -12,6 +12,7 @@ enum KeychainError: LocalizedError {
     case retrieveFailed(OSStatus)
     case deleteFailed(OSStatus)
     case invalidData
+    case accessGroupUnavailable
     
     var errorDescription: String? {
         switch self {
@@ -23,6 +24,8 @@ enum KeychainError: LocalizedError {
             return "Failed to delete password from Keychain (error: \(status))"
         case .invalidData:
             return "Invalid password data in Keychain"
+        case .accessGroupUnavailable:
+            return "The app's Keychain access group is unavailable"
         }
     }
 }

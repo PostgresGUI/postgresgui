@@ -14,7 +14,7 @@ import Security
 
 enum KeychainService {
     private static let serviceName = "com.postgresgui.connections"
-    private static let accessGroup = "75KGPEX6ZF.com.postgresgui.connections"
+    private static let accessGroupEntitlement = "keychain-access-groups"
 
     // Save password to Keychain
     static func savePassword(_ password: String, for connectionId: UUID) throws {
@@ -77,14 +77,11 @@ enum KeychainService {
         // Delete existing item if any
         try? deleteItem(account: account)
 
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: serviceName,
-            kSecAttrAccount as String: account,
+        var query = try query(account: account)
+        query.merge([
             kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
-            kSecAttrAccessGroup as String: accessGroup
-        ]
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
+        ]) { _, newValue in newValue }
 
         let status = SecItemAdd(query as CFDictionary, nil)
 
@@ -94,14 +91,11 @@ enum KeychainService {
     }
 
     private static func getItem(account: String) throws -> String? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: serviceName,
-            kSecAttrAccount as String: account,
+        var query = try query(account: account)
+        query.merge([
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecAttrAccessGroup as String: accessGroup
-        ]
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]) { _, newValue in newValue }
 
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
@@ -123,12 +117,7 @@ enum KeychainService {
     }
 
     private static func deleteItem(account: String) throws {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: serviceName,
-            kSecAttrAccount as String: account,
-            kSecAttrAccessGroup as String: accessGroup
-        ]
+        let query = try query(account: account)
 
         let status = SecItemDelete(query as CFDictionary)
 
@@ -136,5 +125,28 @@ enum KeychainService {
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw KeychainError.deleteFailed(status)
         }
+    }
+
+    private static func query(account: String) throws -> [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
+            kSecAttrAccount as String: account,
+            kSecAttrAccessGroup as String: try accessGroup()
+        ]
+    }
+
+    private static func accessGroup() throws -> String {
+        guard let task = SecTaskCreateFromSelf(nil),
+              let groups = SecTaskCopyValueForEntitlement(
+                  task,
+                  accessGroupEntitlement as CFString,
+                  nil
+              ) as? [String],
+              let accessGroup = groups.first else {
+            throw KeychainError.accessGroupUnavailable
+        }
+
+        return accessGroup
     }
 }
